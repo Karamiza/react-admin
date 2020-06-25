@@ -158,7 +158,7 @@ const initialState = hideFetchedAt({ fetchedAt: {} });
 
 const dataReducer: Reducer<RecordSetWithDate> = (
     previousState = initialState,
-    { payload, meta }
+    { payload, meta, requestPayload }
 ) => {
     if (meta && meta.optimistic) {
         if (meta.fetch === UPDATE) {
@@ -176,7 +176,7 @@ const dataReducer: Reducer<RecordSetWithDate> = (
             return addRecordsAndRemoveOutdated(updatedRecords, previousState);
         }
         if (meta.fetch === DELETE) {
-            return removeRecords([payload.id], previousState);
+            return removeRecords([requestPayload.id], previousState);
         }
         if (meta.fetch === DELETE_MANY) {
             return removeRecords(payload.ids, previousState);
@@ -196,6 +196,12 @@ const dataReducer: Reducer<RecordSetWithDate> = (
         case CREATE:
         case GET_ONE:
             return addOneRecord(payload.data, previousState);
+        // MODIF JB
+        case DELETE:
+            return removeRecords([requestPayload.id], previousState)
+        case DELETE_MANY:
+            return removeRecords(payload.ids, previousState)
+        // END MODIF JB
         default:
             return previousState;
     }
