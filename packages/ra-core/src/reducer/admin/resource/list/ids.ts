@@ -61,6 +61,11 @@ const idsReducer: Reducer<IdentifierArray> = (
     }
 
     switch (action.type) {
+        // modif JB
+        case CRUD_DELETE_SUCCESS: {
+            return previousState.filter((id) => (action as CrudDeleteSuccessAction).requestPayload.id !== id)
+        }
+        // end modif JB
         case CRUD_GET_LIST_SUCCESS:
             return action.payload.data.map(({ id }) => id);
         case CRUD_CREATE_SUCCESS:
